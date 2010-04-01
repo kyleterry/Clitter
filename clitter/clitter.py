@@ -55,7 +55,7 @@ To list your friends status update:
     clitter --list
 
 To make an update:
-    clitter --update=suck it!
+    clitter --update="suck it!"
     """
 
 def _list():
@@ -67,6 +67,7 @@ def _list():
     except urllib2.HTTPError:
         print 'Invalid username or password in ~/.clitterrc'
         sys.exit(2)
+
     for item in timeline:
         print '%s (%s) @ %s' % \
                 (item.GetUser().GetName(), 
@@ -83,7 +84,12 @@ def replies():
     api = twitter.Api(username=config.get('Main', 'username'),
         password=config.get('Main', 'password'))
     
-    timeline = api.GetReplies(count=10)
+    try:
+        timeline = api.GetReplies()
+    except urllib2.HTTPError:
+        print 'Invalid username or password in ~/.clitterrc'
+        sys.exit(2)
+
     print "Listing replies!\n"
     for item in timeline:
         print '%s (%s) @ %s' % \
@@ -103,7 +109,12 @@ def update(status=None):
         password=config.get('Main', 'password'))
 
     if status is not None:
-        api.PostUpdate(status)
+        try:
+            api.PostUpdate(status)
+        except urllib2.HTTPError:
+            print 'Invalid username or password in ~/.clitterrc'
+            sys.exit(2)
+
         print 'Status posted!'
     else:
         print 'No status to post'
