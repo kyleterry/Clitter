@@ -63,7 +63,7 @@ def _list():
         password=config.get('Main', 'password'))
 
     try:
-        timeline = api.GetFriendsTimeline(count=10)
+        timeline = api.GetFriendsTimeline(count=14)
     except urllib2.HTTPError:
         print 'Invalid username or password in ~/.clitterrc'
         sys.exit(2)
